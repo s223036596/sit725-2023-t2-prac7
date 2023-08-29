@@ -1,9 +1,9 @@
 const addCards = (items) => {
     items.forEach(item => {
         let itemToAppend = '<div class="col s4 center-align">'+
-                '<div class="card medium"><div class="card-image waves-effect waves-block waves-light"><img class="activator" src="https://media.istockphoto.com/id/1322123064/photo/portrait-of-an-adorable-white-cat-in-sunglasses-and-an-shirt-lies-on-a-fabric-hammock.jpg?s=612x612&w=0&k=20&c=-G6l2c4jNI0y4cenh-t3qxvIQzVCOqOYZNvrRA7ZU5o=">'+
+                '<div class="card medium"><div class="card-image waves-effect waves-block waves-light"><img class="activator" src="'+item.path+'">'+
                 '</div><div class="card-content">'+
-                '<span class="card-title activator grey-text text-darken-4">'+item.title+'<i class="material-icons right">more_vert</i></span><p><a href="#"></a></p></div>'+
+                '<span class="card-title activator grey-text text-darken-4">'+item.title+'<i class="material-icons right">more_vert</i></span><p><a href="#">'+item.link+'</a></p></div>'+
                 '<div class="card-reveal">'+
                 '<span class="card-title grey-text text-darken-4">'+item.subTitle+'<i class="material-icons right">close</i></span>'+
                 '<p class="card-text">'+item.description+'</p>'+
@@ -12,35 +12,35 @@ const addCards = (items) => {
     });
 }
 
-const formSubmitted = () => {
+const formSumitted = () => {
     let formData = {};
     formData.title = $('#title').val();
-    formData.subTitle = $('#subTitle').val();
     formData.path = $('#path').val();
+    formData.subTitle = $('#subTitle').val();
     formData.description = $('#description').val();
 
     console.log(formData);
     postCat(formData);
 }
 
-function postCat(cat){
+function postCat(cat) {
     $.ajax({
         url:'/api/cat',
         type:'POST',
         data:cat,
-        success: (result)=>{
+        success: (result) => {
             if (result.statusCode === 201) {
-                alert('cat post successful');
+                alert('cat posted');
+                location.reload();
             }
         }
     });
 }
 
-function getAllCats(){
-    $.get('/api/cats', (response)=>{
-        // response's data is in array format, so we can use it
-        if (response.statusCode === 200) {
-            addCards(response.data);
+function getAllCats() {
+    $.get('/api/cat',(result)=>{
+        if (result.statusCode === 200) {
+            addCards(result.data);
         }
     });
 }
@@ -48,7 +48,7 @@ function getAllCats(){
 $(document).ready(function(){
     $('.materialboxed').materialbox();
     $('#formSubmit').click(()=>{
-        formSubmitted();
+        formSumitted();
     });
     $('.modal').modal();
     getAllCats();
